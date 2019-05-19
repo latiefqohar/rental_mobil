@@ -10,13 +10,16 @@
   <meta name="author" content="">
 
   <title>SB Admin 2 - Dashboard</title>
+  <!-- datatables -->
 
   <!-- Custom fonts for this template-->
+  
   <link href="<?php echo base_url(); ?>assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
   <!-- Custom styles for this template-->
   <link href="<?php echo base_url(); ?>assets/css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="<?php echo base_url(); ?>assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 </head>
 
@@ -103,7 +106,7 @@
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Master Data:</h6>
-            <a class="collapse-item" href="<?php echo base_url(); ?>barang">Barang</a>
+            <a class="collapse-item" href="<?php echo base_url(); ?>admin/mobil">Mobil</a>
             <a class="collapse-item" href="<?php echo base_url(); ?>customer">Customer</a>
             <a class="collapse-item" href="<?php echo base_url(); ?>suplier">suplier</a>
             <!-- <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
@@ -308,16 +311,16 @@
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   Profile
                 </a>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="<?php echo base_url();?>admin/ganti_password">
                   <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Settings
+                  Ganti Password
                 </a>
                 <a class="dropdown-item" href="#">
                   <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                   Activity Log
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="<?php echo base_url(); ?>login/logout">
+                <a class="dropdown-item" href="<?php echo base_url(); ?>welcome/logout">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout
                 </a>
