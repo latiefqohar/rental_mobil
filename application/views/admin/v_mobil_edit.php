@@ -2,7 +2,7 @@
 	<div class="card border-left-success shadow h-100 py-2">
 		<div class="card-body">
         <?php
-         foreach($data_mobil as $data){?>
+         foreach($mobil as $data){?>
          
          <form action="<?php echo base_url().'admin/mobil_update' ?>" method="POST" >
              <legend>Edit Mobil</legend>

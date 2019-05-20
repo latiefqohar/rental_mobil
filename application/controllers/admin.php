@@ -84,7 +84,7 @@
 
      public function mobil_edit($id){
          $where = array('mobil_id' => $id );
-         $data['data_mobil']=$this->m_rental->edit_data($where,'mobil')->result();
+         $data['mobil']=$this->m_rental->edit_data($where,'mobil')->result();
          $this->load->view('admin/v_header');
          $this->load->view('admin/v_mobil_edit', $data);
          $this->load->view('admin/v_footer');
