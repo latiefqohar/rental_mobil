@@ -15,7 +15,7 @@
    						<i class="fab fa-intercom fa-2x text-gray-300"></i>
    					</div>
    				</div>
-   				<a href="<?php echo base_url().'admin/kostumer' ?>">
+   				<a href="<?php echo base_url().'admin/customer' ?>">
    					<div class="panel-footer">
    						<span class="pull-left">View Details</span>
    					</div>

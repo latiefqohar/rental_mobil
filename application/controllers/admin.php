@@ -48,6 +48,8 @@
             $this->load->view('admin/v_footer'); }
      }
 
+    //  crud mobil
+
      public function mobil(){
          $data['mobil']=$this->m_rental->get_data('mobil')->result();
          $this->load->view('admin/v_header');
@@ -123,6 +125,98 @@
         redirect(base_url().'admin/mobil?pesan=hapus');
      }
  
+    //  crud customer
+    public function customer(){
+        $data['customer']=$this->m_rental->get_data('kostumer')->result();
+        $this->load->view('admin/v_header');
+        $this->load->view('admin/v_customer', $data);
+        $this->load->view('admin/v_footer');
+            
+    }
+
+    public function add_customer(){
+        if (isset($_POST['add'])) {
+           $nama=$this->input->post('nama');
+           $alamat=$this->input->post('alamat');
+           $jk=$this->input->post('jk');
+           $no_hp=$this->input->post('no_hp');
+           $nik=$this->input->post('nik');
+           $this->form_validation->set_rules('nama', 'Nama', 'required');
+            $this->form_validation->set_rules('alamat', 'Alamat', 'required');
+            $this->form_validation->set_rules('no_hp', 'Nomor Handphone', 'required');
+            $this->form_validation->set_rules('nik', 'NIK', 'required');
+            
+            if($this->form_validation->run() != false){
+            
+                $data = array(
+                'kostumer_nama' => $nama,
+                'kostumer_alamat' => $alamat,
+                'kostumer_jk' => $jk,
+                'kostumer_hp' => $no_hp,
+                'kostumer_ktp' => $nik
+                );
+                $this->m_rental->insert_data($data,'kostumer');
+                redirect(base_url().'admin/customer?pesan=berhasil');
+            }else{
+                $this->load->view('admin/v_header');
+                $this->load->view('admin/v_customer_add');
+                $this->load->view('admin/v_footer'); 
+            }
+
+        }else{
+
+        
+        $this->load->view('admin/v_header');
+        $this->load->view('admin/v_customer_add');
+        $this->load->view('admin/v_footer'); 
+        }
+    }
+
+    public function customer_edit($id){
+        $where = array('kostumer_id' => $id );
+        $data['customer']=$this->m_rental->edit_data($where,'kostumer')->result();
+        $this->load->view('admin/v_header');
+        $this->load->view('admin/v_customer_edit', $data);
+        $this->load->view('admin/v_footer');
+
+    }
+    public function customer_update(){
+        $id = $this->input->post('id'); 
+        $nama = $this->input->post('nama'); 
+        $alamat = $this->input->post('alamat'); 
+        $jk = $this->input->post('jk'); 
+        $hp = $this->input->post('hp'); 
+        $nik = $this->input->post('nik'); 
+        $this->form_validation->set_rules('nama','Nama Customer','required'); 
+        $this->form_validation->set_rules('alamat','Alamat customer','required'); 
+        $this->form_validation->set_rules('hp','Nomor Hp','required'); 
+        $this->form_validation->set_rules('nik','NIK','required'); 
+        if($this->form_validation->run() != false){ 
+            $where = array( 'kostumer_id' => $id ); 
+            $data = array( 
+                'kostumer_nama' => $nama, 
+                'kostumer_alamat' => $alamat, 
+                'kostumer_jk' => $jk, 
+                'kostumer_hp' => $hp, 
+                'kostumer_ktp' => $nik 
+             ); 
+             $this->m_rental->update_data($where,$data,'kostumer'); 
+             redirect(base_url().'admin/customer?pesan=sukses');
+          }else{ 
+              $where = array( 'kostumer_id' => $id ); 
+              $data['customer'] = $this->m_rental->edit_data($where,'kostumer')->result(); 
+              $this->load->view('admin/v_header'); 
+              $this->load->view('admin/v_customer_edit',$data); 
+              $this->load->view('admin/v_footer'); } 
+
+    }
+
+    public function customer_hapus($id){
+        $where = array( 'kostumer_id' => $id ); 
+        $this->m_rental->delete_data($where,'kostumer');
+        redirect(base_url().'admin/customer?pesan=hapus');
+     }
+
  }
  
  /* End of file Admin.php */

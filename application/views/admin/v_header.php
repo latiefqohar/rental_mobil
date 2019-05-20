@@ -107,7 +107,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Master Data:</h6>
             <a class="collapse-item" href="<?php echo base_url(); ?>admin/mobil">Mobil</a>
-            <a class="collapse-item" href="<?php echo base_url(); ?>customer">Customer</a>
+            <a class="collapse-item" href="<?php echo base_url().'admin/customer' ?>">Customer</a>
             <a class="collapse-item" href="<?php echo base_url(); ?>suplier">suplier</a>
             <!-- <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
             <div class="collapse-divider"></div>
