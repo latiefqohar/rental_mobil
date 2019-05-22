@@ -217,6 +217,82 @@
         redirect(base_url().'admin/customer?pesan=hapus');
      }
 
+
+    //  Transaksi
+
+    function transaksi(){
+        $data['transaksi']=$this->db->query("SELECT * FROM transaksi,mobil,kostumer where transaksi_mobil=mobil_id and transaksi_kostumer=kostumer_id")->result();
+        $this->load->view('admin/v_header');
+        $this->load->view('admin/v_transaksi', $data);
+        $this->load->view('admin/v_footer');  
+    } 
+
+    function transaksi_add(){
+        $where = array('mobil_status' => '1');
+        $data['mobil']=$this->m_rental->edit_data($where,'mobil')->result();
+        $data['kostumer']=$this->m_rental->get_data('kostumer')->result();
+        $this->load->view('admin/v_header');
+        $this->load->view('admin/v_transaksi_add', $data);
+        $this->load->view('admin/v_footer');  
+    }
+
+    function transaksi_add_act(){
+        
+        $customer=$this->input->post('kostumer');
+        $mobil=$this->input->post('mobil');
+        $tgl_pinjam=$this->input->post('tgl_pinjam');
+        $tgl_kembali=$this->input->post('tgl_kembali');
+        $harga=$this->input->post('harga');
+        $denda=$this->input->post('denda');
+        
+        $this->form_validation->set_rules('kostumer','Customer','required');
+        $this->form_validation->set_rules('mobil','Mobil','required');
+        $this->form_validation->set_rules('tgl_pinjam','Tanggal Pinjam','required');
+        $this->form_validation->set_rules('tgl_kembali','Tanggal Kembali','required');
+        $this->form_validation->set_rules('harga','Harga','required'); 
+        $this->form_validation->set_rules('denda','Denda','required');
+        if($this->form_validation->run() != false){ 
+            $data = array( 
+                'transaksi_karyawan' => $this->session->userdata('id'), 
+                'transaksi_kostumer' => $customer, 
+                'transaksi_mobil' => $mobil, 
+                'transaksi_tgl_pinjam' => $tgl_pinjam, 
+                'transaksi_tgl_kembali' => $tgl_kembali, 
+                'transaksi_harga' => $harga, 
+                'transaksi_denda' => $denda, 
+                'transaksi_tgl' => date('Y-m-d') 
+            ); 
+           
+            $this->m_rental->insert_data($data,'transaksi'); 
+            // update status mobil yg di pinjam 
+            $d = array( 'mobil_status' => '2' ); 
+            $w = array( 'mobil_id' => $mobil ); 
+           
+            $this->m_rental->update_data($w,$d,'mobil'); 
+            redirect(base_url().'admin/transaksi?pesan=berhasil'); 
+        }else{ 
+            $w = array('mobil_status'=>'1'); 
+            $data['mobil'] = $this->m_rental->edit_data($w,'mobil')->result(); 
+            $data['kostumer'] = $this->m_rental->get_data('kostumer')->result(); 
+            $this->load->view('admin/v_header'); 
+            $this->load->view('admin/v_transaksi_add',$data); 
+            $this->load->view('admin/v_footer'); 
+        } 
+
+        
+        
+    }
+
+    function transaksi_hapus($id){ 
+        $w = array( 'transaksi_id' => $id ); 
+        $data = $this->m_rental->edit_data($w,'transaksi')->row(); 
+
+        $ww = array( 'mobil_id' => $data->transaksi_mobil ); 
+        $data2 = array( 'mobil_status' => '1' ); 
+        $this->m_rental->update_data($ww,$data2,'mobil'); 
+        $this->m_rental->delete_data($w,'transaksi'); 
+        redirect(base_url().'admin/transaksi'); }
+
  }
  
  /* End of file Admin.php */
