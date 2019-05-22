@@ -291,9 +291,70 @@
         $data2 = array( 'mobil_status' => '1' ); 
         $this->m_rental->update_data($ww,$data2,'mobil'); 
         $this->m_rental->delete_data($w,'transaksi'); 
-        redirect(base_url().'admin/transaksi'); }
+        redirect(base_url().'admin/transaksi'); 
+    }
+    function transaksi_selesai($id){
+        $data['mobil']=$this->m_rental->get_data('mobil')->result();
+        $data['kostumer']=$this->m_rental->get_data('kostumer')->result();
+        $data['transaksi']=$this->db->query("SELECT * FROM transaksi,mobil,kostumer where transaksi_mobil=mobil_id and transaksi_kostumer=kostumer_id and transaksi_id='$id'")->result();
+        $this->load->view('admin/v_header'); 
+        $this->load->view('admin/v_transaksi_selesai',$data); 
+        $this->load->view('admin/v_footer');
+    }
+
+    function transaksi_selesai_act(){
+        $id=$this->input->post('id');
+        $tgl_dikembalikan=$this->input->post('tgl_dikembalikan');
+        $tgl_kembali=$this->input->post('tgl_kembali');
+        $mobil=$this->input->post('mobil');
+        $denda=$this->input->post('denda');
+        $this->form_validation->set_rules('tgl_dikembalikan', 'Tanggal DiKembalikan', 'required');
+        
+        if ($this->form_validation->run() == TRUE ) {
+            //menghitung selisih
+            $batas_kembali=strtotime($tgl_kembali);
+            $dikembalikan=strtotime($tgl_dikembalikan);
+            $hari=60*60*24;
+            $selisih=abs(($batas_kembali-$dikembalikan)/$hari);
+            
+            $total_denda=$denda*$selisih;
+        
+
+            //update status transaksi
+            $data = array(
+                'transaksi_tgldikembalikan' => $tgl_dikembalikan, 
+                'transaksi_status'=>'1',
+                'transaksi_totaldenda'=>$total_denda
+            );
+
+            $where=array(
+                'transaksi_id'=>$id
+            );
+            $this->m_rental->update_data($where,$data,'transaksi');
+
+            $data2 = array( 'mobil_status' => '1' ); 
+            $w2 = array( 'mobil_id' => $mobil );
+            $this->m_rental->update_data($w2,$data2,'mobil'); 
+            redirect(base_url().'admin/transaksi');
+        } else {
+            $data['mobil'] = $this->m_rental->get_data('mobil')->result(); 
+            $data['kostumer'] = $this->m_rental->get_data('kostumer')->result(); 
+            $data['transaksi'] = $this->db->query("select * from transaksi,mobil,kostumer where transaksi_mobil=mobil_id and transaksi_kostumer=kostumer_id and transaksi_id='$id'")->result();
+            $this->load->view('admin/v_header'); 
+            $this->load->view('admin/v_transaksi_selesai',$data); 
+            $this->load->view('admin/v_footer');
+        }
+        
+        
+        
+        
+        
+        
+    }
 
  }
+
+    
  
  /* End of file Admin.php */
   
