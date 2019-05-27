@@ -345,17 +345,70 @@
             $this->load->view('admin/v_footer');
         }
         
+   
+    }
+
+    // Laporan
+    function laporan(){
+        $dari=$this->input->post('dari');
+        $sampai=$this->input->post('sampai');
+        $this->form_validation->set_rules('dari', 'Dari Tanggal', 'required');
+        $this->form_validation->set_rules('sampai', 'Sampai Tanggal', 'required');
         
+        if ($this->form_validation->run() == true) {
+            $data['laporan']=$this->db->query("select * from transaksi,mobil,kostumer where transaksi_mobil=mobil_id and transaksi_kostumer=kostumer_id and date(transaksi_tgl) >= '$dari'")->result();
+            $this->load->view('admin/v_header'); 
+            $this->load->view('admin/v_laporan_filter',$data); 
+            $this->load->view('admin/v_footer');
+        } else {
+            $this->load->view('admin/v_header'); 
+            $this->load->view('admin/v_laporan'); 
+            $this->load->view('admin/v_footer');
+        }
+        
+        
+    }
+
+    //fitur print laporan
+    function laporan_print(){
+        $dari= $this->input->get('dari');
+        $sampai=$this->input->get('sampai');
+        if ($dari != "" && $sampai != "") {
+            $data['laporan']= $this->db->query("select * from transaksi, mobil, kostumer where transaksi_mobil=mobil_id and transaksi_kostumer=kostumer_id and date(transaksi_tgl) >= '$dari'")->result();
+            $this->load->view('admin/v_laporan_print', $data);
+            
+        }else {
+            
+            redirect('admin/laporan','refresh');
+            
+        }
+    }
+
+    //fitur cetak pdf
+    function laporan_pdf(){
+        $this->load->library('dompdf_gen');
+        $dari=$this->input->get('dari');
+        $sampai=$this->input->get('sampai');
+        $data['laporan'] = $this->db->query("select * from transaksi,mobil,kostumer where transaksi_mobil=mobil_id and transaksi_kostumer=kostumer_id and date(transaksi_tgl) >= '$dari'")->result();
+        $this->load->view('admin/v_laporan_pdf', $data);
+        $paper_size = 'A4'; //ukuran kertas
+        $orientation ='landscape'; //tipe kertas portait atau landscape
+        $html=$this->output->get_output();
+        $this->dompdf->set_paper($paper_size, $orientation); 
+        //Convert to PDF 
+        $this->dompdf->load_html($html); 
+        $this->dompdf->render(); 
+        $this->dompdf->stream("laporan.pdf", array('Attachment'=>0)); // nama file pdf yang di hasilkan
+
         
         
         
         
     }
 
- }
 
-    
- 
+ }
+  
  /* End of file Admin.php */
   
 ?>

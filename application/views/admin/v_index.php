@@ -61,7 +61,7 @@
    						<i class="fas fa-cash-register fa-3x text-gray-300"></i>
    					</div>
    				</div>
-   				<a href="<?php echo base_url().'admin/mobil' ?>">
+   				<a href="<?php echo base_url().'admin/transaksi' ?>">
    					<div class="panel-footer">
    						<span class="pull-left">View Details</span>
    					</div>
